@@ -83,8 +83,10 @@
 
                 <!-- Add the login button with responsive classes -->
                 <div class="ms-3">
-                  <button class="btn login-button">Login</button>
+                  <!-- Replace button with router-link -->
+                  <router-link :to="{path:'/register'}" class="btn start-button">Start</router-link>
                 </div>
+
 
                 <!-- Add the menu icon for small screens -->
                 <div class="ms-3 d-lg-none d-xl-none">
@@ -306,7 +308,7 @@ export default {
   color: #E9E0CE !important;
 }
 
-.login-button {
+.start-button {
   background-color: #231A00;
   color: #E9E0CE;
   border: 1px solid #231A00;
@@ -315,7 +317,7 @@ export default {
   transition: border-color 0.3s ease, color 0.3s ease;
 }
 
-.login-button:hover {
+.start-button:hover {
   background-color: #231A00;
   border-color: #E25444;
   color: #E25444;
@@ -324,12 +326,15 @@ export default {
 .icon-link {
   cursor: pointer;
   transition: color 0.3s ease;
-  margin-right: 10px; /* Add margin between icons */
+  margin-right: 10px;
+  /* Add margin between icons */
 }
 
 .icon-link:last-child {
-  margin-right: 0; /* Remove margin from the last icon */
+  margin-right: 0;
+  /* Remove margin from the last icon */
 }
+
 .icon-link:hover {
   color: #766161;
 }
@@ -338,11 +343,14 @@ export default {
 
 /* Common styles for the sun and moon icons */
 .icon-link svg {
-  border-radius: 50%; /* Add circular border */
+  border-radius: 50%;
+  /* Add circular border */
   border: 1px solid #ACACAC;
- /* Optional: Add border color */
-  box-sizing: content-box; /* Keep content-box sizing */
-  padding: 8px; /* Add padding for spacing */
+  /* Optional: Add border color */
+  box-sizing: content-box;
+  /* Keep content-box sizing */
+  padding: 8px;
+  /* Add padding for spacing */
 }
 
 .direct-teams-for-your-dedicated-dreams-EtK {
@@ -453,47 +461,46 @@ export default {
 
 /* Common styles for all screen sizes */
 .nav-section {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: center;
-    }
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
 
-    .logo-section {
-      width: auto;
-      /* Adjust width as needed */
-    }
+.logo-section {
+  width: auto;
+  /* Adjust width as needed */
+}
 
-    .d-flex.align-items-center {
-      display: flex;
-      align-items: center;
-    }
+.d-flex.align-items-center {
+  display: flex;
+  align-items: center;
+}
 
-    /* Responsive styles for screen sizes up to 425px */
-    @media (max-width: 425px) {
-      .nav-section {
-        flex-direction: column !important;
-      }
+/* Responsive styles for screen sizes up to 425px */
+@media (max-width: 425px) {
+  .nav-section {
+    flex-direction: column !important;
+  }
 
-      .logo-section {
-        width: 100%;
-        order: 1;
-        justify-content: center;
-      }
+  .logo-section {
+    width: 100%;
+    order: 1;
+    justify-content: center;
+  }
 
-      .d-flex.align-items-center {
-        order: 2;
-      }
-    }
+  .d-flex.align-items-center {
+    order: 2;
+  }
+}
 
-    /* Responsive styles for screens 768px to 1024px */
-    @media (min-width: 768px) and (max-width: 1024px) {
-      .navbar-nav {
-        display: none;
-      }
+/* Responsive styles for screens 768px to 1024px */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .navbar-nav {
+    display: none;
+  }
 
-      .icon-link {
-        display: block;
-      }
-    }
-</style>
+  .icon-link {
+    display: block;
+  }
+}</style>
