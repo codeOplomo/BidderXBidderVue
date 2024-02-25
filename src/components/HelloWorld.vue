@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import MainLayout from '@/components/layouts/MainLayout.vue';
+import MainLayout from '@/components/layouts/usersLayout/MainLayout.vue';
 import AuctionOverviewCard from '@/components/AuctionOverviewCard.vue';
 import AuctionCardElements from '@/components/AuctionCardElements.vue';
 export default {

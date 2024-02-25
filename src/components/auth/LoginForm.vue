@@ -40,26 +40,42 @@
 
 <script>
 import axios from 'axios';
-import MainLayout from '@/components/layouts/MainLayout.vue';
+import MainLayout from '@/components/layouts/usersLayout/MainLayout.vue';
+//import router from '../router'; // Ensure you import your router if you're using Vue Router
 
 export default {
     components: {
         MainLayout,
     },
     data() {
-    return {
-      user: { email: '', password: '', remember_me: false },
-    };
-  },
-  methods: {
-    async login() {
-      const response = await axios.post('http://127.0.0.1:8000/api/login', this.user);
-      localStorage.setItem('userToken', response.data.token);
-      // Redirect or handle success
+        return {
+            user: {
+                email: '',
+                password: '',
+                remember_me: false,
+            },
+            errorMessage: '', // To display login errors
+        };
     },
-},
+    methods: {
+        async login() {
+            try {
+                const response = await axios.post('http://127.0.0.1:8000/api/login', this.user);
+                // Store the token in localStorage or cookie
+                localStorage.setItem('userToken', response.data.token);
+                // Optionally set axios default header with the token
+                axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
+                // Redirect to a success page or root
+                this.$router.push('/');
+            } catch (error) {
+                // Handle login error (e.g., incorrect credentials)
+                this.errorMessage = error.response.data.message || 'Login failed. Please try again.';
+            }
+        },
+    },
 };
 </script>
+
 
 <style scoped>
 .registration-form {

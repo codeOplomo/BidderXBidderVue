@@ -13,8 +13,8 @@
 </template>
 
 <script>
-import NavbarSection from '@/components/layouts/NavbarSection.vue';
-import FooterSection from '@/components/layouts/FooterSection.vue';
+import NavbarSection from '@/components/layouts/usersLayout/NavbarSection.vue';
+import FooterSection from '@/components/layouts/usersLayout/FooterSection.vue';
 
 export default {
   components: {
