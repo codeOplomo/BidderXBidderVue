@@ -39,42 +39,56 @@
 </template>
 
 <script>
-import axios from 'axios';
 import MainLayout from '@/components/layouts/usersLayout/MainLayout.vue';
-//import router from '../router'; // Ensure you import your router if you're using Vue Router
 
 export default {
-    components: {
-        MainLayout,
+  components: {
+    MainLayout,
+  },
+  data() {
+    return {
+      user: {
+        email: '',
+        password: '',
+        remember_me: false,
+      },
+      errorMessage: '', // To display login errors
+    };
+  },
+  methods: {
+    async login() {
+      try {
+        // Directly await the dispatch without assigning its result to a variable
+        await this.$store.dispatch('login', this.user);
+        this.redirectBasedOnRoleId();
+      } catch (error) {
+        console.error('Login failed:', error);
+        this.errorMessage = 'Failed to login. Please check your credentials.';
+      }
     },
-    data() {
-        return {
-            user: {
-                email: '',
-                password: '',
-                remember_me: false,
-            },
-            errorMessage: '', // To display login errors
-        };
-    },
-    methods: {
-        async login() {
-            try {
-                const response = await axios.post('http://127.0.0.1:8000/api/login', this.user);
-                // Store the token in localStorage or cookie
-                localStorage.setItem('userToken', response.data.token);
-                // Optionally set axios default header with the token
-                axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
-                // Redirect to a success page or root
-                this.$router.push('/');
-            } catch (error) {
-                // Handle login error (e.g., incorrect credentials)
-                this.errorMessage = error.response.data.message || 'Login failed. Please try again.';
-            }
-        },
-    },
+    redirectBasedOnRoleId() {
+      const roleId = this.$store.state.user.roles[0]?.pivot?.role_id;
+      switch (roleId) {
+        case 1: // Admin
+          this.$router.push('/admin/DashBoard');
+          break;
+        case 2: // Owner
+          this.$router.push('/owner/profile');
+          break;
+        case 3: // Bidder
+          this.$router.push('/bidder/profile');
+          break;
+        default:
+          this.$router.push('/');
+          break;
+      }
+    }
+  }
 };
 </script>
+
+
+
 
 
 <style scoped>
@@ -170,7 +184,8 @@ export default {
 
 @media (max-width: 768px) {
     .registration-form {
-        flex-direction: column-reverse; /* Reverse the order of flex items on phone-width screens */
+        flex-direction: column-reverse;
+        /* Reverse the order of flex items on phone-width screens */
     }
 
     .image-container,

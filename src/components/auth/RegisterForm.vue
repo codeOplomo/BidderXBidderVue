@@ -56,6 +56,8 @@
                             }}</option>
                         </select>
                         <span v-if="validationErrors.country" class="error-message">{{ validationErrors.country }}</span>
+                      <div v-if="isLoadingCountries">Loading countries...</div>
+                      <div v-else-if="loadCountriesError" class="error-message">Failed to load countries. Please try again.</div>
                     </div>
 
                     <!-- City -->
@@ -66,6 +68,8 @@
                             <option v-for="city in cities" :key="city" :value="city">{{ city }}</option>
                         </select>
                         <span v-if="validationErrors.city" class="error-message">{{ validationErrors.city }}</span>
+                      <div v-if="isLoadingCities">Loading cities...</div>
+                      <div v-else-if="loadCitiesError" class="error-message">Failed to load cities. Please try again.</div>
                     </div>
 
                     <div class="d-flex justify-content-between mt-4">
@@ -122,27 +126,37 @@ export default {
                 country: '',
                 city: '',
             },
+          loadCountriesError: '',
+          loadCitiesError: '',
         };
     },
     async mounted() {
         await this.fetchCountries();
     },
     methods: {
-        async fetchCountries() {
-            this.isLoadingCountries = true;
-            try {
-                const response = await axios.get('https://countriesnow.space/api/v0.1/countries/');
-                this.countries = response.data.data.map(country => ({
-                    name: country.country,
-                    code: country.iso3
-                }));
-            } catch (error) {
-                console.error('Error fetching countries:', error);
-            } finally {
-                this.isLoadingCountries = false;
-            }
-        },
-        async fetchCities() {
+      async fetchCountries() {
+        this.isLoadingCountries = true;
+        const cachedCountries = localStorage.getItem('countries');
+        if (cachedCountries) {
+          this.countries = JSON.parse(cachedCountries);
+          this.isLoadingCountries = false;
+        } else {
+          try {
+            const response = await axios.get('https://countriesnow.space/api/v0.1/countries/');
+            this.countries = response.data.data.map(country => ({
+              name: country.country,
+              code: country.iso3
+            }));
+            localStorage.setItem('countries', JSON.stringify(this.countries));
+          } catch (error) {
+            console.error('Error fetching countries:', error);
+            this.loadCountriesError = 'Failed to load countries.';
+          } finally {
+            this.isLoadingCountries = false;
+          }
+        }
+      },
+      async fetchCities() {
             if (!this.user.country) return;
             this.isLoadingCities = true;
             const selectedCountryName = this.countries.find(country => country.code === this.user.country).name;
@@ -166,7 +180,7 @@ export default {
                 country: selectedCountryName,
             };
             try {
-                await axios.post('http://127.0.0.1:8000/api/register', userWithFullCountryName);
+              await axios.post('/register', userWithFullCountryName);
                 this.$router.push('/login');
             } catch (error) {
                 console.error('Registration error:', error);
@@ -194,12 +208,12 @@ export default {
                 this.validationErrors.password_confirmation = '';
             }
         },
-        validateCountry() {
+        /*validateCountry() {
             this.validationErrors.country = !this.user.country ? 'Please select a country.' : '';
         },
         validateCity() {
             this.validationErrors.city = !this.user.city ? 'Please select a city.' : '';
-        },
+        },*/
     },
     watch: {
         'user.country'(newVal) {

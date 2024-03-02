@@ -10,13 +10,18 @@
                     </router-link>
                 </div>
 
-                <div class="navbar-nav w-100">
-                    <router-link to="/" class="nav-item nav-link"><i
-                            class="fa fa-tachometer-alt me-2"></i>Dashboard</router-link>
-                    <router-link to="/categories" class="nav-item nav-link"><i
-                            class="fa fa-list me-2"></i>Categories</router-link>
-                    <!-- Additional sidebar links -->
-                </div>
+              <div class="navbar-nav w-100">
+                <router-link to="/DashProfile" class="nav-item nav-link"><i class="fa fa-user-circle me-2"></i>Profile</router-link>
+                <router-link to="/admin/DashBoard" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</router-link>
+                <router-link to="/categories" class="nav-item nav-link"><i class="fa fa-list me-2"></i>Categories</router-link>
+                <!-- New sidebar links -->
+                <router-link to="/auctions" class="nav-item nav-link"><i class="fa fa-gavel me-2"></i>Auctions</router-link>
+                <router-link to="/bids" class="nav-item nav-link"><i class="fa fa-hand-paper me-2"></i>Bids</router-link>
+                <router-link to="/categories" class="nav-item nav-link"><i class="fa fa-tags me-2"></i>Category</router-link>
+                <router-link to="/product" class="nav-item nav-link"><i class="fa fa-box-open me-2"></i>Product</router-link>
+                <router-link to="/users" class="nav-item nav-link"><i class="fa fa-users me-2"></i>Users</router-link>
+              </div>
+
             </nav>
         </div>
 
@@ -94,10 +99,14 @@
 <script>
 export default {
     name: 'DashBars',
+  computed: {
+    userName() {
+      return this.$store.getters.fullName; // Use the fullName getter from Vuex store
+    }
+  },
     data() {
         return {
             isSidebarCollapsed: false,
-            userName: 'Admin Name', // Placeholder for user's name
             searchQuery: ''
         };
     },
@@ -110,10 +119,13 @@ export default {
             // Implement search functionality
             console.log("Searching for:", this.searchQuery);
         },
-        logout() {
-            // Implement logout functionality
-            console.log("Logging out");
-        }
+      logout() {
+        this.$store.dispatch('logout').then(() => {
+          this.$router.push('/login');
+        }).catch(error => {
+          console.error('Error during logout:', error);
+        });
+      }
     }
 }
 </script>
@@ -130,6 +142,15 @@ export default {
 
 .d-flex {
     display: flex;
+}
+
+.sidebar .nav-item {
+  transition: all 0.3s ease-in-out; /* This applies to all properties, adjust as needed */
+}
+
+.sidebar .nav-item:hover {
+  transform: translateX(10px); /* Moves the item 10px to the right */
+  background-color: #f0f0f0; /* Example hover background color, adjust as needed */
 }
 
 .sidebar {
@@ -195,9 +216,11 @@ export default {
 }
 
 .navbar-nav {
-    display: flex;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: start; /* Align items to the start of the flex container */
 }
+
 
 @media (max-width: 992px) {
     .navbar-expand .navbar-collapse {

@@ -21,10 +21,10 @@
       // Dynamically import the JavaScript files
       await Promise.all([
         import('@/assets/js/lib/waypoints/waypoints.min.js'),
-        import('@/assets/js/lib/owlcarousel/owl.carousel.min.js'),
+        //import('@/assets/js/lib/owlcarousel/owl.carousel.min.js'),
         import('@/assets/js/lib/tempusdominus/js/moment.min.js'),
         import('@/assets/js/lib/tempusdominus/js/moment-timezone.min.js'),
-        import('@/assets/js/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js'),
+        //import('@/assets/js/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js'),
         import('@/assets/js/dashboard.js'),
       ]).then(() => {
         console.log('All dynamic scripts loaded');

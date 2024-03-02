@@ -1,6 +1,7 @@
 <template>
     <div>
         <DashMainLayout>
+
             <DashStats></DashStats>
         </DashMainLayout>
     </div>
