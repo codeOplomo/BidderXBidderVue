@@ -1,4 +1,5 @@
 <template>
+  <DashMainLayout>
   <div>
     <h1>Admin Dashboard</h1>
     <h2>Bids</h2>
@@ -21,4 +22,18 @@
       </tbody>
     </table>
   </div>
+  </DashMainLayout>
 </template>
+
+
+<script>
+import DashMainLayout from '@/components/layouts/dashminLayout/DashMainLayout.vue';
+import DashStats from '@/components/admin/DashStats.vue'
+
+export default {
+  components: {
+    DashMainLayout,
+    DashStats,
+  },
+};
+</script>

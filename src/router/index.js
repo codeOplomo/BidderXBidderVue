@@ -1,71 +1,75 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import store from '@/store';
 
-import WelcomePage from '@/components/HelloWorld.vue';
-import RegisterForm from '@/components/auth/RegisterForm.vue';
-import LoginForm from '@/components/auth/LoginForm.vue';
-import DashMin from '@/components/admin/DashBoard.vue';
-import DashProfile from '@/components/admin/DashProfile.vue';
-import DashAuctions from '@/components/admin/DashAuctions.vue';
-import DashBids from '@/components/admin/DashBids.vue';
-import DashCategory from '@/components/admin/DashCategory.vue';
-import DashProduct from '@/components/admin/DashProduct.vue';
-import DashUsers from '@/components/admin/DashUsers.vue';
-import Unauthorized from '@/components/Unauthorized.vue';
-
 const routes = [
   {
     path: '/',
     name: 'Home',
-    component: WelcomePage,
+    component: () => import('@/components/HelloWorld.vue'),
   },
   {
     path: '/register',
     name: 'Register',
-    component: RegisterForm,
+    component: () => import('@/components/auth/RegisterForm.vue'),
   },
   {
     path: '/login',
     name: 'Login',
-    component: LoginForm,
+    component: () => import('@/components/auth/LoginForm.vue'),
   },
   {
     path: '/admin/DashBoard',
     name: 'DashMin',
-    component: DashMin,
+    component: () => import('@/components/admin/DashBoard.vue'),
     meta: { requiresAuth: true, role: 'admin' },
   },
-  /*{
-    path: '/owner/profile',
-    name: 'OwnerProfile',
-    component: OwnerProfile, // Import OwnerProfile component at the top
-    meta: { requiresAuth: true, role: 'owner' },
-  },
-  {
-    path: '/bidder/profile',
-    name: 'BidderProfile',
-    component: BidderProfile, // Import BidderProfile component at the top
-    meta: { requiresAuth: true, role: 'bidder' },
-  },*/
   {
     path: '/profile',
     name: 'Profile',
-    component: DashProfile, // Make sure you import the Profile component at the top
-    // Optional: Add meta fields if you require authentication or other checks
+    component: () => import('@/components/admin/DashProfile.vue'),
+    meta: { requiresAuth: true, role: 'admin' }
+  },
+  {
+    path: '/auctions',
+    name: 'Auctions',
+    component: () => import('@/components/admin/DashAuctions.vue'),
     meta: { requiresAuth: true }
   },
-  { path: '/auctions', component: DashAuctions, meta: { requiresAuth: true }},
-  { path: '/bids', component: DashBids, meta: { requiresAuth: true }},
-  { path: '/categories', component: DashCategory, meta: {requiresAuth: true} }, // It might make more sense to have this under '/categories'
-  { path: '/product', component: DashProduct, meta: {requiresAuth: true}},
-  { path: '/users', component: DashUsers, meta: {requiresAuth: true}},
+  {
+    path: '/bids',
+    name: 'Bids',
+    component: () => import('@/components/admin/DashBids.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/categories',
+    name: 'Categories',
+    component: () => import('@/components/admin/DashCategory.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/product',
+    name: 'Product',
+    component: () => import('@/components/admin/DashProduct.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/users',
+    name: 'Users',
+    component: () => import('@/components/admin/DashUsers.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/profile-duplicate',
+    name: 'ProfileDuplicate',
+    component: () => import('@/components/admin/DashProfileDuplicate.vue'),
+    meta: { requiresAuth: true, role: 'admin' }
+  },
   {
     path: '/unauthorized',
-    name: 'Unauthorized',
-    component: Unauthorized,
+    name: 'UnauthorizedPage',
+    component: () => import('@/components/UnauthorizedPage.vue'),
   },
-
-
 ];
 
 const router = createRouter({
@@ -75,16 +79,17 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
-  const userRole = store.getters.userRole; // Example getter to get the user's role
+  const hasRole = store.getters.hasRole;
 
   if (requiresAuth && !store.getters.isAuthenticated) {
     next('/login');
-  } else if (requiresAuth && to.meta.role && to.meta.role !== userRole) {
+  } else if (requiresAuth && to.meta.role && !hasRole(to.meta.role)) {
     next('/unauthorized');
   } else {
     next();
   }
 });
+
 
 
 export default router;

@@ -1,23 +1,25 @@
 import { createApp } from 'vue';
 import App from './App.vue';
-import router from './router';
-import store from './store';
-import swalPlugin from './plugins/sweetalert2';
-import axios from 'axios'; // Ensure axios is imported
+import router from './router'; // Import router
+import store from './store'; // Import store
+import swalPlugin from './plugins/sweetalert2'; // SweetAlert plugin for Vue
+import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-// Now you can safely set axios defaults
+// Axios default configuration
 axios.defaults.baseURL = 'http://127.0.0.1:8000/api';
-
-const app = createApp(App);
 const token = localStorage.getItem('token');
 if (token) {
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 }
 
+// Create Vue application
+const app = createApp(App);
+
+// Use plugins and libraries
 app.use(store);
 app.use(router);
 app.use(swalPlugin);
 
+// Mount the app
 app.mount('#app');
-

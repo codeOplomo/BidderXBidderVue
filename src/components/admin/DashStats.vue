@@ -16,7 +16,7 @@
   
   <script>
   export default {
-    name: 'DashboardStats',
+    name: 'DashStats',
     data() {
       return {
         // Example stats data structure
